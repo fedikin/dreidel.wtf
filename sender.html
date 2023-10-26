@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>The holy dreidel's webhook message system</title>
+    <meta name="twitter:title" content="holy dreidel's webhook message system">
+    <meta property="og:image" content="assets/img/wireframe.png">
+    <meta name="twitter:image" content="assets/img/wireframe.png">
+    <link rel="icon" type="image/png" sizes="450x450" href="assets/img/wireframe.png">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="stylesheet" href="assets/css/Navbar-Right-Links-Dark-icons.css">
+    <link rel="stylesheet" href="assets/css/Pricing-Clean-badges.css">
+    <link rel="stylesheet" href="assets/css/Projects-Grid-images.css">
+    <style>
+
+
+    label {
+        display:block;
+    }
+    .profile-picture {
+    display: block;
+    margin: 0 auto;
+    max-width: 150px;
+    position: relative;
+    max-height: 150px;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .profile-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .input-container {
+    position: relative;
+    margin-bottom: 10px;
+  }
+
+  input[type="text"] {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+
+  .input-container input[type="text"] {
+    padding-left: 30px; /* Adjust this value based on label width */
+  }
+
+  .input-container:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+
+    .input-container {
+      position: relative;
+    }
+
+    input[type="text"] {
+      padding: 5px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius:6px;
+    }
+
+    .input-container input[type="text"] {
+      padding-left: 30px; /* Adjust this value based on label width */
+    }
+
+    .input-container:after {
+      content: "";
+      display: block;
+      clear: both;
+    }
+    #errorText,
+  #successText {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    margin-top: 10px;
+    max-width: 100%;
+    display: inline-block;
+  }
+    </style>
+</head>
+
+<body style="background: #1d1f21;--bs-secondary: #1d1f21;--bs-secondary-rgb: 29,31,33;--bs-primary: #dc3545;--bs-primary-rgb: 220,53,69;--bs-body-color: #ffffff;">
+    <nav class="navbar navbar-dark navbar-expand-md py-3" style="background: transparent;">
+        <div class="container"><a class="navbar-brand d-flex align-items-center" href="#" style="background: transparent;padding-top: 6px;padding-bottom: 6px;padding-right: 6px;padding-left: 6px;border-radius: 5px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -64 640 640" width="1em" height="1em" fill="currentColor" style="font-size: 38px;background: transparent;border-radius: 5px;">
+                    <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                    <path d="M231.1 159.9C227.6 159.9 224 163.6 224 168V288h32V168C256 163.6 252.4 160 248 160L231.1 159.9zM167.1 159.9C163.6 159.9 160 163.6 160 168V288h32V168C192 163.6 188.4 160 184 160L167.1 159.9zM392 160C387.6 160 384 163.6 384 168V288h32V168c0-4.375-3.625-8.061-8-8.061L392 160zM456 160C451.6 160 448 163.6 448 168V288h32V168c0-4.375-3.625-8.061-8-8.061L456 160zM544 168c0-4.375-3.625-8.061-8-8.061L520 160C515.6 160 512 163.6 512 168V288h32V168zM103.1 159.9C99.62 159.9 96 163.6 96 168V288h32V168C128 163.6 124.4 160 120 160L103.1 159.9zM624 160h-31.98c-8.837 0-16.03 7.182-16.03 16.02L576 288c0 17.6-14.4 32-32 32h-192V128c0-8.837-7.151-16.01-15.99-16.01H303.1C295.2 111.1 288 119.2 288 128v192H96c-17.6 0-32-14.4-32-32l.0065-112C64.01 167.2 56.85 160 48.02 160H16C7.163 160 0 167.2 0 176V288c0 53.02 42.98 96 96 96h192v64H175.1C149.5 448 128 469.5 128 495.1C128 504.8 135.2 512 143.1 512h352C504.9 512 512 504.9 512 496C512 469.5 490.5 448 464 448H352v-64h192c53.02 0 96-42.98 96-96V176C640 167.2 632.8 160 624 160zM607.1 127.9C621.2 127.9 632 116 632 101.4C632 86.62 608 48 608 48s-24 38.62-24 53.38C584 116 594.7 127.9 607.1 127.9zM31.1 127.9C45.25 127.9 56 116 56 101.4C56 86.62 32 48 32 48S8 86.62 8 101.4C8 116 18.75 127.9 31.1 127.9zM319.1 79.94c13.25 0 24-11.94 24-26.57C344 38.62 320 0 320 0S296 38.62 296 53.38C296 67.1 306.7 79.94 319.1 79.94zM112 128c13.25 0 24-12 24-26.62C136 86.62 112 48 112 48S88 86.62 88 101.4C88 115.1 98.75 128 112 128zM176 128c13.25 0 24-12 24-26.62C200 86.62 176 48 176 48S152 86.62 152 101.4C152 115.1 162.8 128 176 128zM240 128c13.25 0 24-12 24-26.62C264 86.62 240 48 240 48S216 86.62 216 101.4C216 115.1 226.8 128 240 128zM400 128c13.25 0 24-12 24-26.62C424 86.62 400 48 400 48s-24 38.62-24 53.38C376 115.1 386.8 128 400 128zM464 128c13.25 0 24-12 24-26.62C488 86.62 464 48 464 48s-24 38.62-24 53.38C440 115.1 450.8 128 464 128zM528 128c13.25 0 24-12 24-26.62C552 86.62 528 48 528 48s-24 38.62-24 53.38C504 115.1 514.8 128 528 128z"></path>
+                </svg></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-5"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navcol-5">
+                <ul class="navbar-nav ms-auto" style="border-radius: 5px;background: var(--bs-dark);box-shadow: 5px 5px 16px rgba(0,0,0,0.2);padding-left: 9px;padding-right: 9px;padding-bottom: 4px;padding-top: 4px;">
+                    <li class="nav-item"><a class="nav-link" href="./index.html">Home</a></li>
+                    <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">&nbsp;Discord Tools</a>
+                        <div class="dropdown-menu dropdown-menu-dark text-bg-dark" style="margin-left: -14px;box-shadow: 5px 5px 16px rgb(0,0,0,0.2);"><a class="dropdown-item" href="./deleter">Webhook Deleter&nbsp;</a><a class="dropdown-item" href="./spammer">Webhook Message Sender</a><a class="dropdown-item" href="./lookup">User Lookup&nbsp;</a></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container-sm text-center d-flex justify-content-xl-center" id="about" style="margin-top: 0px;text-align: center;">
+        <div class="row d-xl-flex justify-content-xl-center" id="intro" style="width: 425px;">
+            <div class="col d-xl-flex justify-content-xl-center" data-aos="fade-down-right">
+                <div id="welcome-text">
+                    <h4 class="d-xl-flex justify-content-xl-center" style="background: var(--bs-danger);-webkit-background-clip: text;-webkit-text-fill-color: transparent;font-weight: 500;margin-bottom: -9px;">dreidel.wtf</h4>
+                    <h1 class="d-xl-flex justify-content-xl-center" style="/*-webkit-background-clip: text;*//*-webkit-text-fill-color: transparent;*/font-weight: 400;font-size: 49.88px;">Webhook&nbsp;<span style="font-weight: 560;">Sender</span></h1>
+                    <h5 style="font-weight: 400;width: 366.594px;color: #cbcbcb;">Send any message through a discord webhook using this tool.</h5>
+                    <div class="profile-picture-wrapper">  <div class="input-container">
+                        <label for="profilePicture">Profile Picture</label>
+                        <input type="text" id="profilePicture" placeholder="Enter image URL" oninput="updateProfilePicture()">
+                        <img id="profilePictureImg" class="profile-picture" src="" alt="">
+                      </div>
+                    <label for="username">Username</label>
+                    <div class="input-container"><input type="text" id="username" placeholder="Enter username"></div>
+                    <label for="message">Message</label>
+                    <div class="input-container"><input type="text" id="message" placeholder="Enter your message"></div>
+                    <label for="webhook">Webhook</label>
+                    <div class="input-container"><input type="text" id="webhook" placeholder="Enter webhook URL"></div><button class="btn btn-primary" id="sendMessage" type="button" style="background: var(--bs-danger);border-color: var(--bs-danger);">Send Message</button>
+                </div></div>
+            </div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col">
+                <div class="d-xl-flex justify-content-xl-center" id="errorText"></div>
+                <div class="d-xl-flex justify-content-xl-center" id="successText"></div>
+            </div>
+        </div>
+    </div> <script>
+        function updateProfilePicture() {
+            var imageUrl = document.getElementById("profilePicture").value;
+            document.getElementById("profilePictureImg").src = imageUrl;
+        }
+
+        function sendMessage() {
+            var username = document.getElementById("username").value;
+            var message = document.getElementById("message").value;
+            var webhookUrl = document.getElementById("webhook").value;
+
+            var payload = {
+                username: username,
+                content: message
+            };
+
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById("successText").textContent = "Message sent successfully!";
+                    document.getElementById("errorText").textContent = "";
+                } else {
+                    document.getElementById("successText").textContent = "";
+                    document.getElementById("errorText").textContent = "Failed to send message. Please check the webhook URL.";
+                }
+            })
+            .catch(error => {
+                document.getElementById("successText").textContent = "";
+                document.getElementById("errorText").textContent = "An error occurred while sending the message. Please try again.";
+            });
+        }
+
+        document.getElementById("sendMessage").addEventListener("click", sendMessage);
+    </script>
+    
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+</body>
+
+</html>

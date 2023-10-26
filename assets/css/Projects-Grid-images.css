@@ -1,0 +1,7 @@
+.fit-cover {
+  object-fit: cover;
+}
+
+.mailto, .discord {
+  text-decoration:none;
+} 
